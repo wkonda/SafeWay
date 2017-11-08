@@ -26,6 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        ///////SEEKBAR
         SeekBar bar_choice_delay=(SeekBar) findViewById( R.id.seekBar_choice_delay );
         final TextView text_delay = (TextView) findViewById(R.id.textView_choice_delay);
         text_delay.setText(getString(R.string.choice_delay) + Integer.toString(bar_choice_delay.getProgress()) + "sec.");
@@ -45,11 +46,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 text_delay.setText(text);
             }
         });
-
+        ///////ENDSEEKBAR
+        ///////BOUTTONS
         final Button[] buttons_profil = new Button[3];
-        buttons_profil[0] = (Button) findViewById(R.id.button_pedestrian);
-        buttons_profil[1] = (Button) findViewById(R.id.button_cyclist);
-        buttons_profil[2] = (Button) findViewById(R.id.button_driver);
         View.OnClickListener button_listener = new View.OnClickListener() {
             public void onClick(View v) {
                 int number = Integer.parseInt((String) v.getTag());
@@ -60,10 +59,13 @@ public class WelcomeActivity extends AppCompatActivity {
                         buttons_profil[i].setBackgroundColor(Color.RED);
             }
         };
+        buttons_profil[0] = (Button) findViewById(R.id.button_pedestrian);
+        buttons_profil[1] = (Button) findViewById(R.id.button_cyclist);
+        buttons_profil[2] = (Button) findViewById(R.id.button_driver);
         buttons_profil[0].setOnClickListener(button_listener);
         buttons_profil[1].setOnClickListener(button_listener);
         buttons_profil[2].setOnClickListener(button_listener);
-
+        ///////ENDBUTTONS
     }
 
 }
