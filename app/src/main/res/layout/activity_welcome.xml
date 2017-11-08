@@ -8,57 +8,57 @@
         android:id="@+id/textView_profile_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/profile_title"
-
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+
+        android:layout_marginTop="40dp"
+        android:text="@string/profile_title"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
  />
 
     <Button
         android:id="@+id/button_pedestrian"
         android:layout_width="117dp"
         android:layout_height="wrap_content"
-        android:text="@string/profile_pedestrian"
-
-        android:layout_marginTop="10dp"
         android:layout_below="@id/textView_profile_title"
+
         android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/profile_pedestrian"
  />
     <Button
         android:id="@+id/button_cyclist"
         android:layout_width="117dp"
         android:layout_height="wrap_content"
-        android:text="@string/profile_cyclist"
+        android:layout_alignTop="@id/button_pedestrian"
 
         android:layout_toEndOf="@id/button_pedestrian"
-        android:layout_alignTop="@id/button_pedestrian"
+        android:text="@string/profile_cyclist"
         />
 
     <Button
         android:id="@+id/button_driver"
         android:layout_width="117dp"
         android:layout_height="wrap_content"
-        android:text="@string/profile_driver"
-
-        android:layout_toEndOf="@id/button_cyclist"
         android:layout_alignTop="@id/button_cyclist"
+
         android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@id/button_cyclist"
+        android:text="@string/profile_driver"
  />
 
     <TextView
         android:id="@+id/textView_choice_delay"
         android:layout_width="wrap_content"
         android:layout_height="27dp"
-        android:textSize="20sp"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/choice_delay"
-        android:layout_marginStart="20dp"
         android:layout_below="@id/button_pedestrian"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="60dp"
+        android:text="@string/choice_delay"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
         />
 
     <SeekBar
@@ -66,12 +66,12 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:max="3"
-        android:progress="1"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-
         android:layout_below="@id/textView_choice_delay"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:max="3"
+
+        android:progress="1"
  />
 
 
@@ -79,26 +79,25 @@
         android:id="@+id/checkbox_choice_show_log"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/choice_show_log"
-        android:onClick="onCheckboxClicked"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
 
         android:layout_marginBottom="40dp"
         android:layout_marginStart="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
+        android:onClick="onCheckboxClicked"
+        android:text="@string/choice_show_log"
         />
 
     <TextView
         android:id="@+id/text_logs"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:textSize="12sp"
-        android:textColor="@color/black"
-        android:layout_marginStart="16dp"
-
         android:layout_above="@id/checkbox_choice_show_log"
         android:layout_below="@id/seekBar_choice_delay"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
 
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="12sp"
         />
 </RelativeLayout>
