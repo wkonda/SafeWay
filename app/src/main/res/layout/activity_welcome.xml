@@ -15,8 +15,7 @@
         android:layout_marginTop="40dp"
         android:text="@string/profile_title"
         android:textColor="@color/colorPrimary"
-        android:textSize="20sp"
- />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/button_pedestrian"
@@ -26,8 +25,7 @@
 
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:text="@string/profile_pedestrian"
- />
+        android:text="@string/profile_pedestrian" />
     <Button
         android:id="@+id/button_cyclist"
         android:layout_width="117dp"
@@ -35,8 +33,7 @@
         android:layout_alignTop="@id/button_pedestrian"
 
         android:layout_toEndOf="@id/button_pedestrian"
-        android:text="@string/profile_cyclist"
-        />
+        android:text="@string/profile_cyclist" />
 
     <Button
         android:id="@+id/button_driver"
@@ -46,8 +43,7 @@
 
         android:layout_marginEnd="16dp"
         android:layout_toEndOf="@id/button_cyclist"
-        android:text="@string/profile_driver"
- />
+        android:text="@string/profile_driver" />
 
     <TextView
         android:id="@+id/textView_choice_delay"
@@ -58,8 +54,7 @@
         android:layout_marginTop="60dp"
         android:text="@string/choice_delay"
         android:textColor="@color/colorPrimary"
-        android:textSize="20sp"
-        />
+        android:textSize="20sp" />
 
     <SeekBar
         android:id="@+id/seekBar_choice_delay"
@@ -71,8 +66,7 @@
         android:layout_marginStart="10dp"
         android:max="3"
 
-        android:progress="1"
- />
+        android:progress="1" />
 
 
     <CheckBox
@@ -85,8 +79,7 @@
         android:layout_marginBottom="40dp"
         android:layout_marginStart="20dp"
         android:onClick="onCheckboxClicked"
-        android:text="@string/choice_show_log"
-        />
+        android:text="@string/choice_show_log" />
 
     <TextView
         android:id="@+id/text_logs"
@@ -98,6 +91,5 @@
 
         android:layout_marginTop="20dp"
         android:textColor="@color/black"
-        android:textSize="12sp"
-        />
+        android:textSize="12sp" />
 </RelativeLayout>
