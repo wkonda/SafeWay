@@ -65,7 +65,7 @@ public class WelcomeActivity extends AppCompatActivity {
         buttons_profil[0].setOnClickListener(button_listener);
         buttons_profil[1].setOnClickListener(button_listener);
         buttons_profil[2].setOnClickListener(button_listener);
-        ///////ENDBUTTONS
+        //////ENDBUTTONS
     }
 
 }
