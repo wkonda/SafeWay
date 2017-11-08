@@ -27,8 +27,9 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         SeekBar bar_choice_delay=(SeekBar) findViewById( R.id.seekBar_choice_delay );
+        final TextView text_delay = (TextView) findViewById(R.id.textView_choice_delay);
+        text_delay.setText(getString(R.string.choice_delay) + Integer.toString(bar_choice_delay.getProgress()) + "sec.");
         bar_choice_delay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            private TextView text_delay=(TextView)findViewById(R.id.textView_choice_delay);
             private String text;
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -37,8 +38,10 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 text=getString(R.string.choice_delay);
-                if (progress==0) text+=getString(R.string.never);
-                else text=text+Integer.toString(progress)+"sec.";
+                if (progress == 0)
+                    text += getString(R.string.never);
+                else
+                    text = text + Integer.toString(progress) + "sec.";
                 text_delay.setText(text);
             }
         });
@@ -63,7 +66,4 @@ public class WelcomeActivity extends AppCompatActivity {
 
     }
 
-    public class ButtonLineListener {
-
-    }
 }
