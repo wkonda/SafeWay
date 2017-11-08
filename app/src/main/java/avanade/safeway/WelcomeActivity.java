@@ -10,14 +10,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class WelcomeActivity extends AppCompatActivity {
+    private String position = "fddhgfsqerg";
+
 
     public void onCheckboxClicked(View view) {
-        CheckBox checkbox=(CheckBox)view;
-        TextView text_logs= (TextView) findViewById(R.id.text_logs);
-        if (checkbox.isChecked()){
-            text_logs.setText(getString(R.string.never));
-        }else{
-            text_logs.setText(getString(R.string.app_name));
+        CheckBox checkbox = (CheckBox) view;
+        TextView text_logs = (TextView) findViewById(R.id.text_logs);
+        if (checkbox.isChecked()) {
+            text_logs.setText(position);
+        } else {
+            text_logs.setText("");
         }
     }
 
@@ -27,18 +29,23 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         ///////SEEKBAR
-        SeekBar bar_choice_delay=(SeekBar) findViewById( R.id.seekBar_choice_delay );
+        SeekBar bar_choice_delay = (SeekBar) findViewById(R.id.seekBar_choice_delay);
         final TextView text_delay = (TextView) findViewById(R.id.textView_choice_delay);
         text_delay.setText(getString(R.string.choice_delay) + Integer.toString(bar_choice_delay.getProgress()) + "sec.");
         bar_choice_delay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             private String text;
+
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                text=getString(R.string.choice_delay);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                text = getString(R.string.choice_delay);
                 if (progress == 0)
                     text += getString(R.string.never);
                 else
@@ -57,6 +64,9 @@ public class WelcomeActivity extends AppCompatActivity {
                         buttons_profil[i].setBackgroundColor(Color.GREEN);
                     else
                         buttons_profil[i].setBackgroundColor(Color.RED);
+
+                //////Initialisation de ligne de texte position
+                position = Integer.toString(number);
             }
         };
         buttons_profil[0] = (Button) findViewById(R.id.button_pedestrian);
@@ -68,4 +78,9 @@ public class WelcomeActivity extends AppCompatActivity {
         //////ENDBUTTONS
     }
 
+
+    public enum Profile {
+        PEDESTRIAN, CYCLIST, DRIVER
+    }
 }
+
