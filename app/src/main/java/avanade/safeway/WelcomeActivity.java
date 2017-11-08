@@ -30,12 +30,10 @@ public class WelcomeActivity extends AppCompatActivity {
         bar_choice_delay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             private TextView text_delay=(TextView)findViewById(R.id.textView_choice_delay);
             private String text;
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 text=getString(R.string.choice_delay);
