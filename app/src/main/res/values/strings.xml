@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Safe Way</string>
+
+
+    <string name="profile_title">Mon profile :</string>
+    <string name="profile_pedestrian">Pieton</string>
+    <string name="profile_cyclist">Vélo</string>
+    <string name="profile_driver">Voiture</string>
+    <string name="choice_delay">"Envoyer ma position chaque : "</string>
+    <string name="never">jamais</string>
+    <string name="choice_show_log">Afficher les informations envoyées.</string>
+
+
+</resources>
