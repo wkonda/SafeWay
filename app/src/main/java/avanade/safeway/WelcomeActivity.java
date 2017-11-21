@@ -1,5 +1,6 @@
 package avanade.safeway;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +68,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
                 //////Initialisation de ligne de texte position
                 position = Integer.toString(number);
+
             }
         };
         buttons_profil[0] = (Button) findViewById(R.id.button_pedestrian);
@@ -76,6 +78,10 @@ public class WelcomeActivity extends AppCompatActivity {
         buttons_profil[1].setOnClickListener(button_listener);
         buttons_profil[2].setOnClickListener(button_listener);
         //////ENDBUTTONS
+
+        ////////SERVICE
+        startService(new Intent(this, TCPGPSService.class));
+        /////////ENDSERVICE
     }
 
 

@@ -1,71 +1,23 @@
 package avanade.safeway;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
-/**
- * Created by wkond on 08/11/2017.
- */
 
-public class GPSLocationService extends Service {
+public class TCPGPSService extends Service {
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 10f;
-    private LocationManager mLocationManager = null;
-
-    @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
-    }
-
-}
-
-
-/*
-
-
-public class MyLocationService extends Service {
-    private static final String TAG = "MyLocationService";
-    private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1000;
-    private static final float LOCATION_DISTANCE = 10f;
-
-    private class LocationListener implements android.location.LocationListener {
-        Location mLastLocation;
-
-        public LocationListener(String provider) {
-            Log.e(TAG, "LocationListener " + provider);
-            mLastLocation = new Location(provider);
-        }
-
-        @Override
-        public void onLocationChanged(Location location) {
-            Log.e(TAG, "onLocationChanged: " + location);
-            mLastLocation.set(location);
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            Log.e(TAG, "onProviderDisabled: " + provider);
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            Log.e(TAG, "onProviderEnabled: " + provider);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.e(TAG, "onStatusChanged: " + provider);
-        }
-    }
-
-
-
-    LocationListener[] mLocationListeners = new LocationListener[]{
-            new LocationListener(LocationManager.PASSIVE_PROVIDER)
+    private static final String TAG = "TCPGPSService";
+    SafeWayGPSListener[] mLocationListeners = new SafeWayGPSListener[]{
+            new SafeWayGPSListener(LocationManager.PASSIVE_PROVIDER)
     };
+    private LocationManager mLocationManager = null;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -121,10 +73,10 @@ public class MyLocationService extends Service {
     }
 
     private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager - LOCATION_INTERVAL: "+ LOCATION_INTERVAL + " LOCATION_DISTANCE: " + LOCATION_DISTANCE);
+        Log.e(TAG, "initializeLocationManager - LOCATION_INTERVAL: " + LOCATION_INTERVAL + " LOCATION_DISTANCE: " + LOCATION_DISTANCE);
         if (mLocationManager == null) {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
+
 }
-*/
