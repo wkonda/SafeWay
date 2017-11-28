@@ -1,5 +1,6 @@
 package avanade.safeway;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +11,15 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 
+
 public class TCPGPSService extends Service {
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 10f;
     private static final String TAG = "TCPGPSService";
+
     SafeWayGPSListener[] mLocationListeners = new SafeWayGPSListener[]{
-            new SafeWayGPSListener(LocationManager.PASSIVE_PROVIDER)
+            //new SafeWayGPSListener(LocationManager.PASSIVE_PROVIDER)
+            new SafeWayGPSListener(LocationManager.GPS_PROVIDER)
     };
     private LocationManager mLocationManager = null;
 
@@ -26,24 +30,26 @@ public class TCPGPSService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand");
+        Log.e(TAG, "Service est bien lancé");
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
 
     @Override
     public void onCreate() {
-
         Log.e(TAG, "onCreate");
 
         initializeLocationManager();
 
         try {
-            mLocationManager.requestLocationUpdates(
+            /*mLocationManager.requestLocationUpdates(
                     LocationManager.PASSIVE_PROVIDER,
                     LOCATION_INTERVAL,
                     LOCATION_DISTANCE,
                     mLocationListeners[0]
+            );*/
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 0, 0, mLocationListeners[0]
             );
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
@@ -59,12 +65,12 @@ public class TCPGPSService extends Service {
         Log.e(TAG, "onDestroy");
         super.onDestroy();
         if (mLocationManager != null) {
-            for (int i = 0; i < mLocationListeners.length; i++) {
+            for (SafeWayGPSListener mLocationListener : mLocationListeners) {
                 try {
-                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         return;
                     }
-                    mLocationManager.removeUpdates(mLocationListeners[i]);
+                    mLocationManager.removeUpdates(mLocationListener);
                 } catch (Exception ex) {
                     Log.i(TAG, "fail to remove location listener, ignore", ex);
                 }

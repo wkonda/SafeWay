@@ -1,9 +1,14 @@
 package avanade.safeway;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,12 +16,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class WelcomeActivity extends AppCompatActivity {
+    private static int MY_PERMISSIONS_LOCATION = 1;
     private String position = "fddhgfsqerg";
-
 
     public void onCheckboxClicked(View view) {
         CheckBox checkbox = (CheckBox) view;
         TextView text_logs = (TextView) findViewById(R.id.text_logs);
+        Log.e("abc", "abc");
         if (checkbox.isChecked()) {
             text_logs.setText(position);
         } else {
@@ -28,6 +34,16 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_LOCATION);
+        }
+
 
         ///////SEEKBAR
         SeekBar bar_choice_delay = (SeekBar) findViewById(R.id.seekBar_choice_delay);
@@ -60,12 +76,12 @@ public class WelcomeActivity extends AppCompatActivity {
         View.OnClickListener button_listener = new View.OnClickListener() {
             public void onClick(View v) {
                 int number = Integer.parseInt((String) v.getTag());
-                for (int i = 0; i < 3; ++i)
+                for (int i = 0; i < 3; ++i) {
                     if (i == number)
                         buttons_profil[i].setBackgroundColor(Color.GREEN);
                     else
                         buttons_profil[i].setBackgroundColor(Color.RED);
-
+                }
                 //////Initialisation de ligne de texte position
                 position = Integer.toString(number);
 
@@ -79,8 +95,11 @@ public class WelcomeActivity extends AppCompatActivity {
         buttons_profil[2].setOnClickListener(button_listener);
         //////ENDBUTTONS
 
-        ////////SERVICE
+
+        ////////////////SERVICE///////////////////////
+        stopService(new Intent(this, TCPGPSService.class));
         startService(new Intent(this, TCPGPSService.class));
+        Log.e("starting service", "dd");
         /////////ENDSERVICE
     }
 
