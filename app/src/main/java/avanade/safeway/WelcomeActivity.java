@@ -23,35 +23,20 @@ import java.util.Objects;
 
 public class WelcomeActivity extends AppCompatActivity {
     //////////BROADCAST
-    public static final String action = "com.avanade.safeway.safe_way_gps_position";
+    //public static final String action = "com.avanade.safeway.safe_way_gps_position";
     String position = "";
     boolean show_logs = false;
     //public static final String action = "safe_way_gps_position";
-    //public final String action=" ";//getString(R.string.broadcast_action_name);
-    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.e("Activity", "Enter Broadcast Receiver => " + action);
-            if ((Objects.equals(intent.getAction(), action))) {
-                position = intent.getStringExtra("location");
-                if (position != null) {
-                    Log.e("Activity", position);
-                    if (show_logs) {
-                        TextView text_logs = findViewById(R.id.text_logs);
-                        text_logs.setText(position);
-                    }
-                } else Log.e("Activity", "Position = NULL");
-            }
-        }
-    };
+    String action;
+    private BroadcastReceiver bReceiver;
 
+    /*
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(action));
-    }
-    //LocalBroadcastManager bManager;
-    ////////END BROADCAST
+        //LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(action));
+    }*/
+    ////////END BROADCAST///////////
 
     public void onCheckboxClicked(View view) {
         CheckBox checkbox = (CheckBox) view;
@@ -142,12 +127,32 @@ public class WelcomeActivity extends AppCompatActivity {
         /////////END_SERVICE//////////////////////////////
 
 
-        /*///////////BROADCAST////////////
-        bManager = LocalBroadcastManager.getInstance(this);
+        ///////////BROADCAST////////////
+        /*bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(action);
-        bManager.registerReceiver(bReceiver, intentFilter);
-        //////////END_BROADCAST///////////////*/
+        bManager.registerReceiver(bReceiver, intentFilter);*/
+        action = getString(R.string.broadcast_action_name);
+        Log.e("Activity", "-->> " + action);
+        bReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.e("Activity", "Enter Broadcast Receiver => " + action);
+                if ((Objects.equals(intent.getAction(), action))) {
+                    position = intent.getStringExtra("location");
+                    if (position != null) {
+                        Log.e("Activity", position);
+                        if (show_logs) {
+                            TextView text_logs = findViewById(R.id.text_logs);
+                            text_logs.setText(position);
+                        }
+                    } else Log.e("Activity", "Position = NULL");
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(action));
+        //////////END_BROADCAST///////////////
+
 
     }
 
