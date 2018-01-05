@@ -17,13 +17,10 @@ public class TCPGPSService extends Service {
     private static final float LOCATION_DISTANCE = 10f;
     private static final String TAG = "TCPGPSService";
 
-    SafeWayGPSListener[] mLocationListeners = new SafeWayGPSListener[]{
-            //new SafeWayGPSListener(LocationManager.PASSIVE_PROVIDER)
-            new SafeWayGPSListener(LocationManager.GPS_PROVIDER, this)
-    };
+    SafeWayGPSListener locationListener = new SafeWayGPSListener(LocationManager.GPS_PROVIDER, this);
     private LocationManager mLocationManager = null;
     @Override
-    public IBinder onBind(Intent arg0) {
+    public IBinder onBind(Intent arg) {
         return null;
     }
 
@@ -43,14 +40,14 @@ public class TCPGPSService extends Service {
 
         try {
             /*mLocationManager.requestLocationUpdates(
-                    LocationManager.PASSIVE_PROVIDER,
-                    LOCATION_INTERVAL,
+                    LocationManager.PASSIVE_PROVIDER, //PASSIVE - GPS
+                    LOCATION_INTERVAL, //>=1sec
                     LOCATION_DISTANCE,
-                    mLocationListeners[0]
+                    mLocationListeners[0] //+
             );*/
             mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             if (mLocationManager != null)
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListeners[0]);
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener); //OPTIONS
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {
@@ -64,16 +61,15 @@ public class TCPGPSService extends Service {
         Log.e(TAG, "onDestroy");
         super.onDestroy();
         if (mLocationManager != null) {
-            for (SafeWayGPSListener mLocationListener : mLocationListeners) {
                 try {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         return;
                     }
-                    mLocationManager.removeUpdates(mLocationListener);
+                    mLocationManager.removeUpdates(locationListener);
                 } catch (Exception ex) {
                     Log.i(TAG, "fail to remove location listener, ignore", ex);
                 }
-            }
+
         }
     }
 
