@@ -19,10 +19,9 @@ public class TCPGPSService extends Service {
 
     SafeWayGPSListener[] mLocationListeners = new SafeWayGPSListener[]{
             //new SafeWayGPSListener(LocationManager.PASSIVE_PROVIDER)
-            new SafeWayGPSListener(LocationManager.GPS_PROVIDER)
+            new SafeWayGPSListener(LocationManager.GPS_PROVIDER, this)
     };
     private LocationManager mLocationManager = null;
-
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
@@ -33,6 +32,7 @@ public class TCPGPSService extends Service {
         Log.e(TAG, "Service est bien lancé");
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
+
     }
 
     @Override
@@ -48,17 +48,16 @@ public class TCPGPSService extends Service {
                     LOCATION_DISTANCE,
                     mLocationListeners[0]
             );*/
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 0, 0, mLocationListeners[0]
-            );
+            mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            if (mLocationManager != null)
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListeners[0]);
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {
             Log.d(TAG, "network provider does not exist, " + ex.getMessage());
         }
-
-
     }
+
 
     @Override
     public void onDestroy() {
@@ -84,5 +83,6 @@ public class TCPGPSService extends Service {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
+
 
 }
