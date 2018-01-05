@@ -22,26 +22,15 @@ import android.widget.TextView;
 import java.util.Objects;
 
 public class WelcomeActivity extends AppCompatActivity {
-    //////////BROADCAST
-    //public static final String action = "com.avanade.safeway.safe_way_gps_position";
     String position = "";
+    String broadcast_action = "";
     boolean show_logs = false;
-    //public static final String action = "safe_way_gps_position";
-    String action;
     private BroadcastReceiver bReceiver;
-
-    /*
-    @Override
-    public void onResume() {
-        super.onResume();
-        //LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(action));
-    }*/
-    ////////END BROADCAST///////////
 
     public void onCheckboxClicked(View view) {
         CheckBox checkbox = (CheckBox) view;
         TextView text_logs = findViewById(R.id.text_logs);
-        Log.e("abc", "abc");
+        Log.e("Activity", "Checkbox clicked");
         if (checkbox.isChecked()) {
             text_logs.setText(position);
             show_logs = true;
@@ -51,27 +40,26 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        if (ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(this, //checking for permissions
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(this, //if not allowed => demand
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     1);
         }
 
 
-        ///////SEEKBAR
+        /////////SEEK_BAR//////
         SeekBar bar_choice_delay = findViewById(R.id.seekBar_choice_delay);
         final TextView text_delay = findViewById(R.id.textView_choice_delay);
-        String seekbar_text = getString(R.string.choice_delay) + Integer.toString(bar_choice_delay.getProgress()) + "sec.";
-        text_delay.setText(seekbar_text);
+        String seekBar_text = getString(R.string.choice_delay) + Integer.toString(bar_choice_delay.getProgress()) + "sec.";
+        text_delay.setText(seekBar_text);
         bar_choice_delay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             private String text;
 
@@ -93,52 +81,43 @@ public class WelcomeActivity extends AppCompatActivity {
                 text_delay.setText(text);
             }
         });
-        ///////ENDSEEKBAR
-        ///////BOUTTONS
-        final Button[] buttons_profil = new Button[3];
+        ///////END_SEEK_BAR///////////
+
+        ///////BUTTONS//////////////
+        final Button[] buttons_profile = new Button[3];
         View.OnClickListener button_listener = new View.OnClickListener() {
             public void onClick(View v) {
                 int number = Integer.parseInt((String) v.getTag());
                 for (int i = 0; i < 3; ++i) {
                     if (i == number)
-                        buttons_profil[i].setBackgroundColor(Color.GREEN);
+                        buttons_profile[i].setBackgroundColor(Color.GREEN);
                     else
-                        buttons_profil[i].setBackgroundColor(Color.RED);
+                        buttons_profile[i].setBackgroundColor(Color.RED);
                 }
-                //////Initialisation de ligne de texte position
-                //position = Integer.toString(number);
 
             }
         };
-        buttons_profil[0] = findViewById(R.id.button_pedestrian);
-        buttons_profil[1] = findViewById(R.id.button_cyclist);
-        buttons_profil[2] = findViewById(R.id.button_driver);
-        buttons_profil[0].setOnClickListener(button_listener);
-        buttons_profil[1].setOnClickListener(button_listener);
-        buttons_profil[2].setOnClickListener(button_listener);
-        //////ENDBUTTONS
+        buttons_profile[0] = findViewById(R.id.button_pedestrian);
+        buttons_profile[1] = findViewById(R.id.button_cyclist);
+        buttons_profile[2] = findViewById(R.id.button_driver);
+        buttons_profile[0].setOnClickListener(button_listener);
+        buttons_profile[1].setOnClickListener(button_listener);
+        buttons_profile[2].setOnClickListener(button_listener);
+        //////END_BUTTONS/////////
 
 
         ////////////////SERVICE///////////////////////
         stopService(new Intent(this, TCPGPSService.class));
-        Log.e("stopping service", "ddd");
         startService(new Intent(this, TCPGPSService.class));
-        Log.e("starting service", "dd");
         /////////END_SERVICE//////////////////////////////
 
 
         ///////////BROADCAST////////////
-        /*bManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(action);
-        bManager.registerReceiver(bReceiver, intentFilter);*/
-        action = getString(R.string.broadcast_action_name);
-        Log.e("Activity", "-->> " + action);
+        broadcast_action = getString(R.string.broadcast_action_name);
         bReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.e("Activity", "Enter Broadcast Receiver => " + action);
-                if ((Objects.equals(intent.getAction(), action))) {
+                if ((Objects.equals(intent.getAction(), broadcast_action))) {
                     position = intent.getStringExtra("location");
                     if (position != null) {
                         Log.e("Activity", position);
@@ -150,7 +129,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         };
-        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(action));
+        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(broadcast_action));
         //////////END_BROADCAST///////////////
 
 
