@@ -1,98 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.constraint.Guideline
+        android:id="@+id/left_guideline"
+        android:layout_width="0dp"
+
+        android:layout_height="0dp"
+        android:orientation="vertical"
+
+        app:layout_constraintGuide_percent=".333" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="0dp"
+
+        android:layout_height="0dp"
+        android:orientation="vertical"
+
+        app:layout_constraintGuide_percent=".666" />
+
     <TextView
         android:id="@+id/textView_profile_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
 
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+
         android:text="@string/profile_title"
         android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_pedestrian"
-        android:layout_width="117dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_profile_title"
 
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
+
         android:tag='0'
-        android:text="@string/profile_pedestrian" />
+        android:text="@string/profile_pedestrian"
+
+        app:layout_constraintRight_toLeftOf="@+id/left_guideline"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile_title" />
+
     <Button
         android:id="@+id/button_cyclist"
-        android:layout_width="117dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/button_pedestrian"
 
-        android:layout_toEndOf="@id/button_pedestrian"
         android:tag='1'
-        android:text="@string/profile_cyclist" />
+        android:text="@string/profile_cyclist"
+
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/button_pedestrian" />
 
     <Button
         android:id="@+id/button_driver"
-        android:layout_width="117dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/button_cyclist"
 
-        android:layout_marginEnd="16dp"
-        android:layout_toEndOf="@id/button_cyclist"
+        android:layout_marginEnd="5dp"
         android:tag='2'
-        android:text="@string/profile_driver" />
+
+        android:text="@string/profile_driver"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/button_pedestrian" />
 
     <TextView
         android:id="@+id/textView_choice_delay"
-        android:layout_width="wrap_content"
-        android:layout_height="27dp"
-        android:layout_below="@id/button_pedestrian"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+
         android:text="@string/choice_delay"
         android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
+
+        android:textSize="20sp"
+
+        app:layout_constraintEnd_toEndOf="@+id/textView_profile_title"
+        app:layout_constraintStart_toStartOf="@+id/textView_profile_title"
+        app:layout_constraintTop_toBottomOf="@+id/button_pedestrian" />
 
     <SeekBar
         android:id="@+id/seekBar_choice_delay"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_choice_delay"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+
+        android:layout_marginTop="10dp"
         android:max="3"
 
-        android:progress="1" />
+        android:progress="1"
+
+        app:layout_constraintEnd_toEndOf="@+id/button_driver"
+        app:layout_constraintStart_toStartOf="@+id/button_pedestrian"
+        app:layout_constraintTop_toBottomOf="@+id/textView_choice_delay" />
 
 
     <CheckBox
         android:id="@+id/checkbox_choice_show_log"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
 
-        android:layout_marginBottom="40dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
         android:onClick="onCheckboxClicked"
-        android:text="@string/choice_show_log" />
+
+        android:text="@string/choice_show_log"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_profile_title"
+        app:layout_constraintStart_toStartOf="@+id/textView_profile_title" />
+
 
     <TextView
         android:id="@+id/text_logs"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_above="@id/checkbox_choice_show_log"
-        android:layout_below="@id/seekBar_choice_delay"
-        android:layout_marginStart="16dp"
 
         android:layout_marginTop="20dp"
         android:textColor="@color/black"
-        android:textSize="12sp" />
-</RelativeLayout>
+
+        android:textSize="12sp"
+
+        app:layout_constraintBottom_toTopOf="@+id/checkbox_choice_show_log"
+        app:layout_constraintEnd_toEndOf="@+id/button_driver"
+        app:layout_constraintStart_toStartOf="@+id/button_pedestrian"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_choice_delay" />
+
+</android.support.constraint.ConstraintLayout>
