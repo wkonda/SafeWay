@@ -5,24 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.constraint.Guideline
-        android:id="@+id/left_guideline"
-        android:layout_width="0dp"
-
-        android:layout_height="0dp"
-        android:orientation="vertical"
-
-        app:layout_constraintGuide_percent=".333" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/right_guideline"
-        android:layout_width="0dp"
-
-        android:layout_height="0dp"
-        android:orientation="vertical"
-
-        app:layout_constraintGuide_percent=".666" />
-
     <TextView
         android:id="@+id/textView_profile_title"
         android:layout_width="0dp"
@@ -44,16 +26,17 @@
         android:id="@+id/button_pedestrian"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
         android:layout_marginStart="5dp"
+
         android:layout_marginTop="10dp"
-
         android:tag='0'
+
         android:text="@string/profile_pedestrian"
+        app:layout_constraintHorizontal_weight="1"
 
-        app:layout_constraintRight_toLeftOf="@+id/left_guideline"
 
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button_cyclist"
         app:layout_constraintTop_toBottomOf="@+id/textView_profile_title" />
 
     <Button
@@ -64,8 +47,9 @@
         android:tag='1'
         android:text="@string/profile_cyclist"
 
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintStart_toEndOf="@+id/left_guideline"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/button_pedestrian"
+        app:layout_constraintRight_toLeftOf="@+id/button_driver"
         app:layout_constraintTop_toTopOf="@+id/button_pedestrian" />
 
     <Button
@@ -78,8 +62,9 @@
 
         android:text="@string/profile_driver"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/right_guideline"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/button_cyclist"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button_pedestrian" />
 
     <TextView
