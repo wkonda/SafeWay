@@ -124,8 +124,8 @@
         android:textSize="12sp"
 
         app:layout_constraintBottom_toTopOf="@+id/checkbox_choice_show_log"
-        app:layout_constraintEnd_toEndOf="@+id/button_driver"
-        app:layout_constraintStart_toStartOf="@+id/button_pedestrian"
+        app:layout_constraintEnd_toEndOf="@+id/textView_profile_title"
+        app:layout_constraintStart_toStartOf="@+id/textView_profile_title"
         app:layout_constraintTop_toBottomOf="@+id/seekBar_choice_delay" />
 
 </android.support.constraint.ConstraintLayout>
