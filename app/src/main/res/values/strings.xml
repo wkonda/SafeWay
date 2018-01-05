@@ -10,7 +10,7 @@
     <string name="never">jamais</string>
     <string name="choice_show_log">Afficher les informations envoyées.</string>
 
-    <string name="broadcast_action_name">com.avanade.safeway.safe_way_gps_position</string>
+    <string name="broadcast_action_name">"com.avanade.safeway.safe_way_gps_position"</string>
 
 
 </resources>
