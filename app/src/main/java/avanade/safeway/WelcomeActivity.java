@@ -139,15 +139,15 @@ public class WelcomeActivity extends AppCompatActivity {
         Log.e("stopping service", "ddd");
         startService(new Intent(this, TCPGPSService.class));
         Log.e("starting service", "dd");
-        /////////ENDSERVICE
+        /////////END_SERVICE//////////////////////////////
 
 
-        /*///////////BRODCAST////////////
+        /*///////////BROADCAST////////////
         bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(action);
         bManager.registerReceiver(bReceiver, intentFilter);
-        //////////ENDBRODCAST///////////////*/
+        //////////END_BROADCAST///////////////*/
 
     }
 
