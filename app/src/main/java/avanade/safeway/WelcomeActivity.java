@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,7 +26,17 @@ public class WelcomeActivity extends AppCompatActivity {
     String position = "";
     String broadcast_action = "";
     boolean show_logs = false;
+    int delay = 1;
+    int profile_code = -1;
+    Intent service;
     private BroadcastReceiver bReceiver;
+
+    private void restartService(Intent service) {
+        stopService(service);
+        service.putExtra("profile_code", profile_code);
+        service.putExtra("delay", delay);
+        startService(service);
+    }
 
     public void onCheckboxClicked(View view) {
         CheckBox checkbox = (CheckBox) view;
@@ -40,19 +51,38 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
+    /////////////////KEY_BUTTONS///////////////
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.i("Activity", "Back. Stopping service");
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+            stopService(service);
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            restartService(service);
+        }
+        return true;
+    }
+    ///////////////END_KEY_BUTTONS
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
         if (ContextCompat.checkSelfPermission(this, //checking for permissions
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, //if not allowed => demand
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1);
-        }
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        else
+            service = new Intent(this, TCPGPSService.class);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
 
 
         /////////SEEK_BAR//////
@@ -74,10 +104,28 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 text = getString(R.string.choice_delay);
-                if (progress == 0)
+                if (progress == 0) {
                     text += getString(R.string.never);
-                else
-                    text = text + Integer.toString(progress) + "sec.";
+                    delay = 0;
+                    stopService(service);
+                } else {
+                    switch (progress) {
+                        case 1:
+                            delay = 1;
+                            break;
+                        case 2:
+                            delay = 5;
+                            break;
+                        case 3:
+                            delay = 15;
+                            break;
+                        default:
+                            delay = 1;
+                            break;
+                    }
+                    text = text + Integer.toString(delay) + " sec.";
+                    restartService(service);
+                }
                 text_delay.setText(text);
             }
         });
@@ -87,14 +135,15 @@ public class WelcomeActivity extends AppCompatActivity {
         final Button[] buttons_profile = new Button[3];
         View.OnClickListener button_listener = new View.OnClickListener() {
             public void onClick(View v) {
-                int number = Integer.parseInt((String) v.getTag());
+                profile_code = Integer.parseInt((String) v.getTag());
                 for (int i = 0; i < 3; ++i) {
-                    if (i == number)
+                    if (i == profile_code)
                         buttons_profile[i].setBackgroundColor(Color.GREEN);
                     else
                         buttons_profile[i].setBackgroundColor(Color.RED);
                 }
-
+                Log.e("Activity", "profileChanged");
+                restartService(service);
             }
         };
         buttons_profile[0] = findViewById(R.id.button_pedestrian);
@@ -107,8 +156,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
         ////////////////SERVICE///////////////////////
-        stopService(new Intent(this, TCPGPSService.class));
-        startService(new Intent(this, TCPGPSService.class));
+        //stopService(new Intent(this, TCPGPSService.class));
+        restartService(service);
+        //startService(new Intent(this, TCPGPSService.class));
         /////////END_SERVICE//////////////////////////////
 
 
@@ -129,6 +179,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         };
+
+
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(broadcast_action));
         //////////END_BROADCAST///////////////
 

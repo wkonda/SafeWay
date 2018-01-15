@@ -11,6 +11,7 @@
     <string name="choice_show_log">Afficher les informations envoyées.</string>
 
     <string name="broadcast_action_name">"com.avanade.safeway.safe_way_gps_position"</string>
+    <string name="logs_file_name">"gps_logs.txt"</string>
 
 
 </resources>

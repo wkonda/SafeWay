@@ -78,7 +78,7 @@ public class SafeWayGPSListener implements android.location.LocationListener {
         File file = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.logs_file_name));
         if (!file.exists())
             try {
-                boolean newFile = file.createNewFile();
+                file.createNewFile();
             } catch (Exception e) {
                 Log.e("Listener", "File not created.");
             }
