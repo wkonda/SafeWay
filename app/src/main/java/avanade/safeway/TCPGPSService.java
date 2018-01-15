@@ -13,11 +13,10 @@ import android.util.Log;
 
 
 public class TCPGPSService extends Service {
-    private static final int LOCATION_INTERVAL = 1000;
-    private static final float LOCATION_DISTANCE = 10f;
     private static final String TAG = "TCPGPSService";
-
-    SafeWayGPSListener locationListener = new SafeWayGPSListener(LocationManager.GPS_PROVIDER, this);
+    int location_delay_ms;
+    int profile_code;
+    SafeWayGPSListener locationListener;
     private LocationManager mLocationManager = null;
     @Override
     public IBinder onBind(Intent arg) {
@@ -26,33 +25,33 @@ public class TCPGPSService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "Service est bien lancé");
+        Log.e(TAG, "Starting service");
         super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
+        location_delay_ms = 1000 * intent.getExtras().getInt("delay");
+        profile_code = intent.getExtras().getInt("profile_code");
+        Log.e(TAG, "delay" + location_delay_ms + profile_code);
 
+        initializeLocationManager();
+        locationListener = new SafeWayGPSListener(LocationManager.GPS_PROVIDER, this, profile_code);
+
+        try {
+            mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            if (mLocationManager != null)
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, location_delay_ms, 0, locationListener);
+        } catch (java.lang.SecurityException ex) {
+            Log.i(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
+        }
+
+        return START_STICKY;
     }
 
     @Override
     public void onCreate() {
         Log.e(TAG, "onCreate");
 
-        initializeLocationManager();
 
-        try {
-            /*mLocationManager.requestLocationUpdates(
-                    LocationManager.PASSIVE_PROVIDER, //PASSIVE - GPS
-                    LOCATION_INTERVAL, //>=1sec
-                    LOCATION_DISTANCE,
-                    mLocationListeners[0] //+
-            );*/
-            mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            if (mLocationManager != null)
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener); //OPTIONS
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
-        }
     }
 
 
@@ -74,7 +73,6 @@ public class TCPGPSService extends Service {
     }
 
     private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager - LOCATION_INTERVAL: " + LOCATION_INTERVAL + " LOCATION_DISTANCE: " + LOCATION_DISTANCE);
         if (mLocationManager == null) {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
