@@ -32,12 +32,12 @@ public class TCPGPSService extends Service {
         Log.e(TAG, "delay" + location_delay_ms + profile_code);
 
         initializeLocationManager();
-        locationListener = new SafeWayGPSListener(LocationManager.GPS_PROVIDER, this, profile_code);
-
+        String provider = LocationManager.GPS_PROVIDER; //LocationManager.GPS_PROVIDER vs PASSIVE_PROVIDER vs NETWORK
+        locationListener = new SafeWayGPSListener(provider, this, profile_code);
         try {
             mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             if (mLocationManager != null)
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, location_delay_ms, 0, locationListener);
+                mLocationManager.requestLocationUpdates(provider, location_delay_ms, 0, locationListener);
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {
