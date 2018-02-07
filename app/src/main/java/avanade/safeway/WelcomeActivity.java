@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -30,6 +32,7 @@ public class WelcomeActivity extends AppCompatActivity {
     int profile_code = -1;
     Intent service;
     private BroadcastReceiver bReceiver;
+
 
     private void restartService(Intent service) {
         stopService(service);
@@ -67,15 +70,20 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //restore preferences
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        delay = sharedPref.getInt("delay", 1);
+        profile_code = sharedPref.getInt("profile_code", -1);
+
         setContentView(R.layout.activity_welcome);
 
         if (ContextCompat.checkSelfPermission(this, //checking for permissions
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, //if not allowed => demand
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        else
+        else {
             service = new Intent(this, TCPGPSService.class);
-
+        }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -86,20 +94,14 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
         /////////SEEK_BAR//////
+        final int[] progress2delay = {0, 1, 5, 15};
         SeekBar bar_choice_delay = findViewById(R.id.seekBar_choice_delay);
+        bar_choice_delay.setProgress(Arrays.binarySearch(progress2delay, delay));
         final TextView text_delay = findViewById(R.id.textView_choice_delay);
-        String seekBar_text = getString(R.string.choice_delay) + Integer.toString(bar_choice_delay.getProgress()) + "sec.";
+        String seekBar_text = getString(R.string.choice_delay) + Integer.toString(delay) + "sec.";
         text_delay.setText(seekBar_text);
         bar_choice_delay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             private String text;
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -109,30 +111,26 @@ public class WelcomeActivity extends AppCompatActivity {
                     delay = 0;
                     stopService(service);
                 } else {
-                    switch (progress) {
-                        case 1:
-                            delay = 1;
-                            break;
-                        case 2:
-                            delay = 5;
-                            break;
-                        case 3:
-                            delay = 15;
-                            break;
-                        default:
-                            delay = 1;
-                            break;
-                    }
+                    delay = progress2delay[progress];
                     text = text + Integer.toString(delay) + " sec.";
                     restartService(service);
                 }
                 text_delay.setText(text);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
         ///////END_SEEK_BAR///////////
 
         ///////BUTTONS//////////////
         final Button[] buttons_profile = new Button[3];
+
         View.OnClickListener button_listener = new View.OnClickListener() {
             public void onClick(View v) {
                 profile_code = Integer.parseInt((String) v.getTag());
@@ -142,7 +140,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     else
                         buttons_profile[i].setBackgroundColor(Color.RED);
                 }
-                Log.e("Activity", "profileChanged");
+                Log.i("Activity", "profileChanged");
                 restartService(service);
             }
         };
@@ -152,12 +150,18 @@ public class WelcomeActivity extends AppCompatActivity {
         buttons_profile[0].setOnClickListener(button_listener);
         buttons_profile[1].setOnClickListener(button_listener);
         buttons_profile[2].setOnClickListener(button_listener);
+        for (int i = 0; i < 3; ++i) {
+            if (i == profile_code)
+                buttons_profile[i].setBackgroundColor(Color.GREEN);
+            else
+                buttons_profile[i].setBackgroundColor(Color.RED);
+        }
         //////END_BUTTONS/////////
 
 
         ////////////////SERVICE///////////////////////
         //stopService(new Intent(this, TCPGPSService.class));
-        restartService(service);
+        if (delay != 0) restartService(service);
         //startService(new Intent(this, TCPGPSService.class));
         /////////END_SERVICE//////////////////////////////
 
@@ -184,17 +188,31 @@ public class WelcomeActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(broadcast_action));
         //////////END_BROADCAST///////////////
 
+        SafeWayGPSListener.resendData(getString(R.string.logs_file_name));
+
 
     }
 
 
     @Override
     public void onDestroy() {
+        SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+        editor.putInt("delay", delay);
+        editor.putInt("profile_code", profile_code);
+        editor.apply();
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
+        stopService(service);
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+        editor.putInt("delay", delay);
+        editor.putInt("profile_code", profile_code);
+        editor.apply();
+    }
     /*public enum Profile {
         PEDESTRIAN, CYCLIST, DRIVER
     }*/
