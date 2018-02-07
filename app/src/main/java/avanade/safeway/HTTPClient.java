@@ -10,6 +10,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static avanade.safeway.SafeWayGPSListener.saveData;
+
 
 public class HTTPClient extends AsyncTask<String, Void, Void> {
     @Override
@@ -28,20 +30,18 @@ public class HTTPClient extends AsyncTask<String, Void, Void> {
         Log.e("HTTPClient", "doInBackground");
 
         try {
-            URL url = new URL("http://192.168.43.169:8080");
+            URL url = new URL("http://82.243.88.198");
 
-            //String data="name=Sid&email=58999&user=user&pass=passsss";
-
-            BufferedReader reader;
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
+            conn.setConnectTimeout(1000);
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            Log.e("HTTPClient", data[0]);
-            wr.write(data[0]);
+            Log.e("HTTPClient", data[1]);
+            wr.write(data[1]);
             wr.flush();
 
             // Get the server response
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder sb = new StringBuilder();
             String line;
 
@@ -56,7 +56,8 @@ public class HTTPClient extends AsyncTask<String, Void, Void> {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("HTTPClient", e.toString());
+            saveData(data[0], data[1] + '\n');
         }
 
         return null;
