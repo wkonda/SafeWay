@@ -188,7 +188,7 @@ public class WelcomeActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter(broadcast_action));
         //////////END_BROADCAST///////////////
 
-        SafeWayGPSListener.resendData(getString(R.string.logs_file_name));
+
 
 
     }
@@ -212,6 +212,13 @@ public class WelcomeActivity extends AppCompatActivity {
         editor.putInt("delay", delay);
         editor.putInt("profile_code", profile_code);
         editor.apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SafeWayGPSListener.resendData(getString(R.string.logs_file_name));
+
     }
     /*public enum Profile {
         PEDESTRIAN, CYCLIST, DRIVER
