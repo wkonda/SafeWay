@@ -80,7 +80,6 @@ public class SafeWayGPSListener implements android.location.LocationListener {
                     new HTTPClient().execute(file_name, line);
                 }
 
-
                 is.close();
                 reader.close();
                 temp_file.delete();
